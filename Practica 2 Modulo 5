@@ -1,0 +1,18 @@
+Práctica 2: Cluster de Alta Disponibilidad (Pacemaker)
+Instalación (En ambos servidores)
+Bash
+sudo apt update
+sudo apt install pacemaker corosync crmsh -y
+En el Server1, define el recurso de la IP (reemplaza 192.168.1.100 por una IP libre en tu red):
+
+Bash
+sudo crm configure primitive VirtualIP ocf:heartbeat:IPaddr2 \
+   params ip="192.168.1.100" cidr_netmask="24" \
+   op monitor interval="10s"
+Pruebas de HA
+Desde tu PC física, deja un comando corriendo: ping 192.168.1.100 -t.
+
+Apaga el Server1 (sudo reboot).
+
+Verás que el ping se pierde por 1 o 2 segundos y luego continúa
+ respondiendo porque el Server2 tomó la IP automáticamente.
