@@ -1,0 +1,39 @@
+Práctica 3: Cluster HTTP con Keepalived
+Preparar los Web Servers (Ambos nodos)
+Server 1: echo "<h1>Servidor 1</h1>" | sudo tee /var/www/html/index.html
+
+Server 2: echo "<h1>Servidor 2</h1>" | sudo tee /var/www/html/index.html
+Instalación y Configuración de Keepalived
+sudo apt install keepalived -y
+sudo nano /etc/keepalived/keepalived.conf
+Configuración para el Server 1 (Master):
+vrrp_instance VI_1 {
+    state MASTER
+    interface enp0s3        # Verifica el nombre de tu tarjeta con ip link
+    virtual_router_id 51
+    priority 100
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1234
+    }
+    virtual_ipaddress {
+        192.168.1.150       # Esta será tu IP de acceso web
+    }
+}
+
+(En el Server 2, cambia state a BACKUP y priority a 90).
+sudo systemctl restart keepalived
+
+Prueba de oro:
+
+Abre el navegador en http://192.168.1.150. Verás "Servidor 1".
+
+Apaga el Server 1.
+
+Refresca el navegador. Debería salir "Servidor 2" sin que hayas cambiado la IP.
+Ver estado del cluster: sudo crm status
+
+Ver IP flotante activa: ip addr show (busca la IP secundaria en la interfaz).
+
+Ver logs de sincronización: tail -f /var/log/syslog
