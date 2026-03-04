@@ -1,0 +1,14 @@
+Modulo 5 practica 1 (Clonar maquina)
+# Crear carpeta y 100 archivos
+mkdir -p ~/datos_sincronizados
+touch ~/datos_sincronizados/archivo{1..100}.txt
+
+# Generar llave SSH para que no pida contraseña al sincronizar
+ssh-keygen -t rsa  # Dale a ENTER a todo
+ssh-copy-id usuario@IP_DEL_SERVER2
+nano ~/sync.sh
+#!/bin/bash
+rsync -avz --delete ~/datos_sincronizados/ usuario@IP_DEL_SERVER2:~/datos_sincronizados/
+chmod +x ~/sync.sh
+crontab -e
+* * * * * /home/tu_usuario/sync.sh
