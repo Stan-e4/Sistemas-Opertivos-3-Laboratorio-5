@@ -32,7 +32,7 @@ Abre el navegador en http://192.168.1.150. Verás "Servidor 1".
 Apaga el Server 1.
 
 Refresca el navegador. Debería salir "Servidor 2" sin que hayas cambiado la IP.
-Ver estado del cluster: sudo crm status
+Ver estado del cluster: sudo keepalived status
 
 Ver IP flotante activa: ip addr show (busca la IP secundaria en la interfaz).
 
